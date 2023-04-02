@@ -41,13 +41,13 @@ def print_log(message):
     print(message)
     logging.info(message)
 
-# Seaches for file (including subdirectories) with given name and start path
-# Returns None if file not found
+# Seaches for file (including subdirectories, but excluding 'bin' and 'build')
+# with given name and start path. Returns None if file not found
 def findfile(name, path):
     if path == '':
         return name
     for dirpath, dirname, filename in os.walk(path):
-        if name in filename:
+        if name in filename and 'bin' not in dirpath and 'build' not in dirpath:
             return os.path.join(dirpath, name)
 
 # Allows editable input suggestions
