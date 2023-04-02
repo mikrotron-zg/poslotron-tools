@@ -9,6 +9,7 @@ ContentEntityLabels.xml
 ContentErrorUiLabels.xml
 ContentUiLabels.xml
 HumanResEntityLabels.xml
+HumanResErrorUiLabels.xml
 HumanResUiLabels.xml
 ManufacturingEntityLabels.xml
 ManufacturingReportsUiLabels.xml
@@ -47,3 +48,9 @@ WebappUiLabels.xml
 WebtoolsErrorUiLabels.xml
 WebtoolsUiLabels.xml
 EcommerceUiLabels.xml
+CommonThemeUiLabels.xml
+conditionalUiLabels.xml
+DefaultMessagesUiLabels.xml
+EmailPasswordUiLabels.xml
+ProductPromoUiLabels.xml
+QRCodeUiLabels.xml
