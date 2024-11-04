@@ -1236,5 +1236,40 @@ DROP TABLE IF EXISTS public.test_blob CASCADE;
 DROP TABLE IF EXISTS public.selenium_test_suite_path CASCADE;
 DROP TABLE IF EXISTS public.example_feature CASCADE;
 
-ROLLBACK; -- comment out to make actual changes to the database
--- COMMIT; -- uncomment to make actual changes to the database
+-- Changes from 22.01 to 24.09
+CREATE TABLE IF NOT EXISTS public.shopping_list_item_attribute
+(
+    shopping_list_id character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    shopping_list_item_seq_id character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    attr_name character varying(60) COLLATE pg_catalog."default" NOT NULL,
+    attr_value character varying(255) COLLATE pg_catalog."default",
+    last_updated_stamp timestamp with time zone,
+    last_updated_tx_stamp timestamp with time zone,
+    created_stamp timestamp with time zone,
+    created_tx_stamp timestamp with time zone,
+    CONSTRAINT pk_shopping_list_item_attribut PRIMARY KEY (shopping_list_id, shopping_list_item_seq_id, attr_name),
+    CONSTRAINT shlist_item_attr FOREIGN KEY (shopping_list_id, shopping_list_item_seq_id)
+        REFERENCES public.shopping_list_item (shopping_list_id, shopping_list_item_seq_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.shopping_list_item_attribute
+    OWNER to ofbiz;
+CREATE INDEX IF NOT EXISTS shg_lst_itm_att_tp
+    ON public.shopping_list_item_attribute USING btree
+    (last_updated_tx_stamp ASC NULLS LAST)
+    TABLESPACE pg_default;
+CREATE INDEX IF NOT EXISTS shg_lst_itm_att_ts
+    ON public.shopping_list_item_attribute USING btree
+    (created_tx_stamp ASC NULLS LAST)
+    TABLESPACE pg_default;
+CREATE INDEX IF NOT EXISTS shlist_item_attr
+    ON public.shopping_list_item_attribute USING btree
+    (shopping_list_id COLLATE pg_catalog."default" ASC NULLS LAST, shopping_list_item_seq_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+--ROLLBACK; -- comment out to make actual changes to the database
+COMMIT; -- uncomment to make actual changes to the database

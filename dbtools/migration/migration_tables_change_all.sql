@@ -9423,5 +9423,28 @@ ALTER TABLE public.security_group
 ALTER TABLE IF EXISTS public.security_group
     ADD COLUMN group_name character varying(255) COLLATE pg_catalog."default";
 
-ROLLBACK;  -- comment out to make actual changes to the database
--- COMMIT; -- uncomment to make actual changes to the database
+-- Remaining changes not found in the first pass
+CREATE INDEX IF NOT EXISTS prod_prcde_pcd
+    ON public.prod_promo_code_contact_mech USING btree
+    (product_promo_code_id COLLATE pg_catalog."default" ASC NULLS LAST)
+    TABLESPACE pg_default;
+ALTER TABLE IF EXISTS public.security_group_permission
+    ALTER COLUMN from_date DROP DEFAULT;
+
+-- Changes from 22.01 to 24.09
+ALTER TABLE IF EXISTS public.job_sandbox
+    ADD COLUMN run_time_epoch numeric(20, 0);
+
+ALTER TABLE IF EXISTS public.party_acctg_preference DROP COLUMN IF EXISTS invoice_sequence_enum_id;
+ALTER TABLE IF EXISTS public.party_acctg_preference DROP COLUMN IF EXISTS order_sequence_enum_id;
+ALTER TABLE IF EXISTS public.party_acctg_preference DROP COLUMN IF EXISTS quote_sequence_enum_id;
+ALTER TABLE IF EXISTS public.order_item_ship_grp_inv_res DROP COLUMN IF EXISTS pick_start_date;
+ALTER TABLE IF EXISTS public.person DROP COLUMN IF EXISTS marital_status;
+ALTER TABLE IF EXISTS public.order_item
+    ADD COLUMN discount_rate numeric(18, 6);
+ALTER TABLE IF EXISTS public.inventory_item DROP COLUMN IF EXISTS available_to_promise;
+ALTER TABLE IF EXISTS public.inventory_item DROP COLUMN IF EXISTS quantity_on_hand;
+ALTER TABLE IF EXISTS public.facility DROP COLUMN IF EXISTS square_footage;
+
+--ROLLBACK;  -- comment out to make actual changes to the database
+COMMIT; -- uncomment to make actual changes to the database
